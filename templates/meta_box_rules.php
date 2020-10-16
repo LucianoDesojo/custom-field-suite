@@ -92,8 +92,25 @@ foreach ( $results as $result ) {
 }
 
 // Page templates
-$page_templates = [];
-$templates = get_page_templates();
+$post_types     = get_post_types();
+$PostTypesArray = array();
+foreach( $post_types as $PT){
+    if( $PT != 'attachment' &&  $PT != 'revision' ){
+        $PostTypesArray[] = $PT;
+    }
+}
+
+$page_templates     = [];
+$templates          = [];
+foreach( $PostTypesArray as $P ){
+    $Temp = get_page_templates( null, $P );
+    if(!empty($Temp)){
+        foreach( $Temp as $K => $V ){
+            $templates[ ucfirst($P).' - ' . $K ] = $V;
+        }
+    }
+}
+
 
 foreach ( $templates as $template_name => $filename ) {
     $page_templates[ $filename ] = $template_name;
